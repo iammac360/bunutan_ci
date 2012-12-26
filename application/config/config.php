@@ -26,7 +26,8 @@ $config['base_url']	= sprintf('%s://%s', $_SERVER['HTTP_X_FORWARDED_PROTO'], $_S
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+// $config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
