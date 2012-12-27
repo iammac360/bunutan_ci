@@ -25,6 +25,7 @@ class Main extends CI_Controller {
 
 		$this->user_id = $this->facebook->getUser();
 
+
 		if($this->user_id) {
 			try {
 				// Fetch the viewer's vasic information

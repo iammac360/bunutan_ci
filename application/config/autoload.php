@@ -53,7 +53,7 @@ $autoload['packages'] = array();
 */
 
 // $autoload['libraries'] = array();
-$autoload['libraries'] = array('src/facebook');
+$autoload['libraries'] = array('facebook');
 
 
 /*
