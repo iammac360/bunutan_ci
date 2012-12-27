@@ -129,8 +129,9 @@
     </script>
     <header class="clearfix">
 	<?php if (isset($user_info)): ?>
-		<div class="fb-login-button" data-scope="user_likes,user_photos"></div>
-	<?php endif ?>
+	<?php else: ?>	
+    <div class="fb-login-button" data-scope="user_likes,user_photos"></div>
+	<?php endif; ?>
 	</header>
 </body>
 </html>
