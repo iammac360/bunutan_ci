@@ -47,14 +47,26 @@
 
 $active_group = 'default';
 $active_record = TRUE;
+//Herokus PostrgreSQL
+// $heroku_postgre_url = parse_url($_SERVER['DATABASE_URL']);
+// $db['default']['hostname'] = $heroku_postgre_url['host'];
+// $db['default']['username'] = $heroku_postgre_url['user'];
+// $db['default']['password'] = $heroku_postgre_url['pass'];
+// $db['default']['database'] = trim($heroku_postgre_url['path'], '/');
+// $db['default']['dbdriver'] = 'postgre';
 
-$heroku_postgre_url = parse_url($_SERVER['DATABASE_URL']);
+//Production
+// $db['default']['hostname'] = 'localhost';
+// $db['default']['username'] = 'root';
+// $db['default']['password'] = '';
+// $db['default']['database'] = 'ci-demodb';
 
-$db['default']['hostname'] = $heroku_postgre_url['host'];
-$db['default']['username'] = $heroku_postgre_url['user'];
-$db['default']['password'] = $heroku_postgre_url['pass'];
-$db['default']['database'] = trim($heroku_postgre_url['path'], '/');
-$db['default']['dbdriver'] = 'postgre';
+//Local Development
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
+$db['default']['database'] = 'olbunutan';
+$db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;

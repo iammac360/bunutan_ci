@@ -1,4 +1,3 @@
-<?php echo getenv('FACEBOOK_APP_ID'); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

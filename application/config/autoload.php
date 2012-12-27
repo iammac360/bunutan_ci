@@ -53,7 +53,7 @@ $autoload['packages'] = array();
 */
 
 // $autoload['libraries'] = array();
-$autoload['libraries'] = array("facebook");
+$autoload['libraries'] = array('facebook');
 
 
 /*
@@ -66,7 +66,7 @@ $autoload['libraries'] = array("facebook");
 */
 
 // $autoload['helper'] = array();
-$autoload['helper'] = array("facebook");
+$autoload['helper'] = array('utils', 'url');
 
 
 /*
@@ -83,7 +83,7 @@ $autoload['helper'] = array("facebook");
 */
 
 // $autoload['config'] = array();
-$autoload['config'] = array("facebook");
+$autoload['config'] = array('facebook');
 
 
 /*
