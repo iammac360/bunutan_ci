@@ -56,16 +56,16 @@ $active_record = TRUE;
 // $db['default']['dbdriver'] = 'postgre';
 
 //Production
+$db['default']['hostname'] = 'sql2.freemysqlhosting.net';
+$db['default']['username'] = 'sql21533';
+$db['default']['password'] = 'kJ9*kR6%';
+$db['default']['database'] = 'sql21533';
+
+//Local Development
 // $db['default']['hostname'] = 'localhost';
 // $db['default']['username'] = 'root';
 // $db['default']['password'] = '';
-// $db['default']['database'] = 'ci-demodb';
-
-//Local Development
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'olbunutan';
+// $db['default']['database'] = 'olbunutan';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
