@@ -35,6 +35,8 @@ class Main extends CI_Controller {
 
 		}
 
+		echo $this->user_id;
+
 		// Fetch the basic info of the app that they are using
 		$this->app_info = $this->facebook->api('/'.$this->app_id);
 
