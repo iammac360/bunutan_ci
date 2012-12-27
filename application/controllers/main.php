@@ -19,6 +19,7 @@ class Main extends CI_Controller {
 		// Load facebook config
 		$this->load->config('facebook');
 
+
 		$this->app_id = $this->config->item('appId');
 		$this->app_secret = $this->config->item('secret');
 

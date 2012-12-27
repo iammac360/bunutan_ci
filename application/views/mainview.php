@@ -129,6 +129,7 @@
     </script>
     <header class="clearfix">
 	<?php if (isset($user_info)): ?>
+    <h1>Welcome</h1>
 	<?php else: ?>	
     <div class="fb-login-button" data-scope="user_likes,user_photos"></div>
 	<?php endif; ?>
