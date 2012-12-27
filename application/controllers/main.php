@@ -24,18 +24,18 @@ class Main extends CI_Controller {
 		$this->app_secret = $this->config->item('secret');
 
 		$this->user_id = $this->facebook->getUser();
-
-
 		if($this->user_id) {
 			try {
 				// Fetch the viewer's vasic information
-				$this->user_info = $facebook->api('/me');
+				$this->user_info = $this->facebook->api('/me');
 			} catch (FacebookApiException $e) {
 				header('Location: '. getUrl($_SERVER['REQUEST_URI']));
 				exit();
 			}
 
 		}
+
+
 
 		echo $this->user_id;
 
@@ -75,17 +75,18 @@ class Main extends CI_Controller {
 
 		//For Debugging Purposes only. 
 		//Uncomment it if you want to see all the data in a preformatted form
-		// echo 'This is the app id: '.$this->app_id.'<br />';
-		// echo '<pre>';
-		// // print_r($this->config);
-		// echo 'App Info: <br />';
-		// print_r($this->app_info);
-		// echo 'Number of members: '.count($members).'<br />';
-		// echo 'Data that will be sent to view: <br />';
-		// print_r($data);
-		// echo '<br />Facebook Group Data: <br />';
-		// print_r($this->group_members);
-		// echo '</pre>';
+		echo 'This is the app id: '.$this->app_id.'<br />';
+		echo '<pre>';
+		print_r($_SERVER['QUERY_STRING']);
+		// print_r($this->config);
+		echo 'App Info: <br />';
+		print_r($this->app_info);
+		echo 'Number of members: '.count($members).'<br />';
+		echo 'Data that will be sent to view: <br />';
+		print_r($data);
+		echo '<br />Facebook Group Data: <br />';
+		print_r($this->group_members);
+		echo '</pre>';
 
 		if(count($members) == 0)
 		{
