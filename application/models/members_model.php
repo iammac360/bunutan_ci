@@ -18,14 +18,14 @@ class Members_model extends CI_Model {
 		$this->db->insert_batch('members', $data);
 	}
 
-	public function update_member($fb_id)
+	public function update_member($fb_id, $data = array())
 	{
-		$data = array(
-				'pick_id'	=> $this->input->post('pick_id'),
-				'pick_name'	=> $this->input->post('pick_name')
-			);
+		// $data = array(
+		// 		'pick_id'	=> $this->input->post('pick_id'),
+		// 		'pick_name'	=> $this->input->post('pick_name')
+		// 	);
 		$this->db->where('fb_id', $fb_id);
-		$this->fb->update('members', $data);
+		$this->db->update('members', $data);
 	}
 
 	public function get_all_members()

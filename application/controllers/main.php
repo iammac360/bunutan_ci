@@ -58,9 +58,6 @@ class Main extends CI_Controller {
 	{
 		
 		$members 			= $this->members_model->get_all_members();
-		$members_pick 		= array();
-		$members_picked 	= array();
-		$members_not_picked = array();
 		$form_hiddendata 	= array();
 		$hide 				= "";
 		$show 				= "block";
@@ -78,55 +75,13 @@ class Main extends CI_Controller {
 				$members_data[$key]['fb_id']	= $value['id'];
 				$members_data[$key]['fb_name'] 	= $value['name'];
 			}
-			// echo '<pre>';
-			// print_r($members_data);
-			// echo '</pre>';
 			$this->members_model->set_all_members($members_data);
 		}
 
-		foreach($members as $key => $value)
-		{
-			if(empty($members[$key]->pick_id))
-			{
-				$members_pick[$key] = array(
-					'fb_id' 				=> 	$members[$key]->fb_id, 
-					'fb_name'				=>	$members[$key]->fb_name,
-					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
-					'fb_image_url_thumb' 	=>	$this->graph_url.$members[$key]->fb_id.'/picture?type=square',
-					'pick_id'				=>	0,
-					'pick_name'				=>	'Anonymous',
-					'pick_image_url_large'	=>	base_url().'/images/unknown.jpg',
-					'pick_image_url_thumb'	=>	base_url().'/images/unknown.gif'
-				);
-
-				$members_not_picked[$key] = array(
-					'fb_id' 				=> 	$members[$key]->fb_id, 
-					'fb_name'				=>	$members[$key]->fb_name,
-					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140'
-				);
-			}
-			else
-			{
-				$members_pick[$key] = array(
-					'fb_id' 				=> 	$members[$key]->fb_id, 
-					'fb_name'				=>	$members[$key]->fb_name,
-					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
-					'fb_image_url_thumb' 	=>	$this->graph_url.$members[$key]->fb_id.'/picture?type=square',
-					'pick_id'				=>	$members[$key]->pick_id,
-					'pick_name'				=>	$members[$key]->pick_name,
-					'pick_image_url_large'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?width=140&height=140',
-					'pick_image_url_thumb'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?type=square'
-				);
-				$members_picked[$key] = array(
-					'fb_id' 				=> 	$members[$key]->fb_id, 
-					'fb_name'				=>	$members[$key]->fb_name,
-					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
-					'pick_id'				=>	$members[$key]->pick_id,
-					'pick_name'				=>	$members[$key]->pick_name,
-					'pick_image_url_large'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?width=140&height=140'
-				);
-			}
-		}
+		$picks_data			= $this->getMemberPicks($members);
+		$members_pick 		= $picks_data['members_pick'];
+		$members_picked 	= $picks_data['members_picked'];
+		$members_not_picked = $picks_data['members_not_picked'];
 
 		foreach($members_not_picked as $key => $value)
 		{
@@ -164,7 +119,7 @@ class Main extends CI_Controller {
 			}
 		}
 
-		// Initialize the data to be used on views
+		//Initialize the data to be used on views
 		$data = array(
 				'app_info' 			=> $this->app_info,
 				'app_id'			=> $this->app_id,
@@ -172,7 +127,7 @@ class Main extends CI_Controller {
 				'app_image'			=> $this->app_info['logo_url'],
 				'user_info'			=> $this->user_info,
 				'user_id'			=> $this->user_id,
-				'group_memebers' 	=> $this->group_members,
+				'group_members' 	=> $this->group_members,
 				'graph_url'			=> $this->graph_url,
 				'members'			=> $members,
 				'members_pick'		=> $members_pick,
@@ -205,6 +160,7 @@ class Main extends CI_Controller {
 		// echo 'This is the user id: '.$this->user_id.'<br />';
 		// echo 'This is the app id: '.$this->app_id.'<br />';
 		// echo '<pre>';
+		// print_r($picks_data);
 		// // print_r($this->config);
 		// echo 'App Info: <br />';
 		// print_r($this->app_info);
@@ -220,20 +176,131 @@ class Main extends CI_Controller {
 		// print_r($members_picked);
 		// echo 'List of members from members table: <br/>';
 		// print_r($members);
+		// print_r($this->group_members);
 		// echo '</pre>';
-
-
 
 		$this->load->view('mainview', $data);
 	}
 
-	public function pick()
-	{
-
-	}
-
 	public function process()
 	{
-		
+		$user_id = $this->input->post('fb_id');
+		$pick_info = $this->pickRandomID($user_id);
+		if($pick_info === 0)
+		{
+			echo "The user is not logged in. Cannot continue the operation.";
+		}
+		else
+		{
+			$data = array(
+				'pick_id'	=> $pick_info['fb_id'],
+				'pick_name'	=> $pick_info['fb_name']
+			);
+			$this->members_model->update_member($user_id, $data);
+			echo 1;
+		}
+
+		/**
+		* For Debugging Purpose only. 
+		* Uncomment it if you want to see 
+		* all the data in a preformatted form
+		*/
+		// $pick_info = $this->pickRandomID($this->user_id);
+		// echo '<pre>';
+		// print_r($pick_info);
+		// echo '</pre>';
+		// echo $pick_info['fb_id'];
+	}
+
+	private function getMemberPicks($members = array())
+	{
+		$members_pick 		= array();
+		$members_picked 	= array();
+		$members_not_picked = array();
+		$picks_data			= array();
+
+		foreach($members as $key => $value)
+		{
+			if(empty($members[$key]->pick_id))
+			{
+				$members_pick[$key] = array(
+					'fb_id' 				=> 	$members[$key]->fb_id, 
+					'fb_name'				=>	$members[$key]->fb_name,
+					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
+					'fb_image_url_thumb' 	=>	$this->graph_url.$members[$key]->fb_id.'/picture?type=square',
+					'pick_id'				=>	0,
+					'pick_name'				=>	'Anonymous',
+					'pick_image_url_large'	=>	base_url().'/images/unknown.jpg',
+					'pick_image_url_thumb'	=>	base_url().'/images/unknown.gif'
+				);
+
+				$members_not_picked[$key] 	= array(
+					'fb_id' 				=> 	$members[$key]->fb_id, 
+					'fb_name'				=>	$members[$key]->fb_name,
+					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140'
+				);
+			}
+			else
+			{
+				$members_pick[$key] = array(
+					'fb_id' 				=> 	$members[$key]->fb_id, 
+					'fb_name'				=>	$members[$key]->fb_name,
+					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
+					'fb_image_url_thumb' 	=>	$this->graph_url.$members[$key]->fb_id.'/picture?type=square',
+					'pick_id'				=>	$members[$key]->pick_id,
+					'pick_name'				=>	$members[$key]->pick_name,
+					'pick_image_url_large'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?width=140&height=140',
+					'pick_image_url_thumb'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?type=square'
+				);
+				$members_picked[$key] = array(
+					'fb_id' 				=> 	$members[$key]->fb_id, 
+					'fb_name'				=>	$members[$key]->fb_name,
+					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
+					'pick_id'				=>	$members[$key]->pick_id,
+					'pick_name'				=>	$members[$key]->pick_name,
+					'pick_image_url_large'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?width=140&height=140'
+				);
+			}
+		}
+
+		$picks_data = array(
+				'members_pick'		=> 	$members_pick,
+				'members_picked'	=> 	$members_picked,
+				'members_not_picked'=>	$members_not_picked
+			);
+
+		return $picks_data;
+	}
+
+	private function pickRandomID($user_id = '')
+	{
+		$members 			= $this->members_model->get_all_members();
+		$picks_data 		= $this->getMemberPicks($members);
+		$members_not_picked = array();
+
+		if(empty($user_id) || $user_id != $this->user_id)
+		{
+			return 0;
+		}
+		else
+		{
+			// Removes the user from the list to elimination picking himself
+			foreach($picks_data['members_not_picked'] as $key => $value)
+			{
+				if($value['fb_id'] != $user_id)
+				{
+					$members_not_picked[$key] = $value;
+				}
+			}
+
+			$pick = array_rand($members_not_picked, 1);
+			// echo '<pre>';
+			// print_r($members_not_picked);
+			// echo '<br /> This is my pick:';
+			// print_r($members_not_picked[$pick]);
+			// echo '</pre>';
+
+			return $members_not_picked[$pick];
+		}
 	}
 }
