@@ -143,7 +143,7 @@
             // alert("fb_id: " + pick_id + " | name: " + pick_name);
 
             $.ajax({
-              url: "<?php echo base_url(); ?>process.php",
+              url: "<?php echo base_url(); ?>process",
               type: "POST",
               data: $('#process').serialize(),
               dataType: "json",
