@@ -215,6 +215,11 @@ class Main extends CI_Controller {
 		// echo $pick_info['fb_id'];
 	}
 
+	public function debug($params)
+	{
+		
+	}
+
 	private function getMemberPicks($members = array())
 	{
 		$members_pick 		= array();
@@ -237,7 +242,7 @@ class Main extends CI_Controller {
 					'pick_image_url_thumb'	=>	base_url().'/images/unknown.gif'
 				);
 
-				$members_not_picked[$key] 	= array(
+				$members_not_picked[$key] 	= 	array(
 					'fb_id' 				=> 	$members[$key]->fb_id, 
 					'fb_name'				=>	$members[$key]->fb_name,
 					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140'
@@ -245,7 +250,7 @@ class Main extends CI_Controller {
 			}
 			else
 			{
-				$members_pick[$key] = array(
+				$members_pick[$key] 		= 	array(
 					'fb_id' 				=> 	$members[$key]->fb_id, 
 					'fb_name'				=>	$members[$key]->fb_name,
 					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140',
@@ -264,6 +269,19 @@ class Main extends CI_Controller {
 					'pick_image_url_large'	=>	$this->graph_url.$members[$key]->pick_id.'/picture?width=140&height=140'
 				);
 			}
+
+			foreach($members_not_picked as $key => $val)
+			{
+				foreach($members_picked as $k => $v)
+				{
+					if($val['fb_id'] == $v['pick_id'])
+					{
+						unset($members_not_picked[$key]);
+					}
+				}
+			}
+			sort($members_not_picked);
+			sort($members_picked);
 		}
 
 		$picks_data = array(
@@ -280,6 +298,7 @@ class Main extends CI_Controller {
 		$members 			= $this->members_model->get_all_members();
 		$picks_data 		= $this->getMemberPicks($members);
 		$members_not_picked = array();
+		$members_picked 	= $picks_data['members_picked'];
 
 		if(empty($user_id) || $user_id != $this->user_id)
 		{
@@ -287,10 +306,10 @@ class Main extends CI_Controller {
 		}
 		else
 		{
-			// Removes the user from the list to elimination picking himself
+			// Removes the user from the array to elimination picking himself
 			foreach($picks_data['members_not_picked'] as $key => $value)
 			{
-				if($value['fb_id'] != $user_id)
+				if($value['fb_id'] != $user_id && $value)
 				{
 					$members_not_picked[$key] = $value;
 				}

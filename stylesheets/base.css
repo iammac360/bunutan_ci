@@ -406,6 +406,12 @@ input.button[type=submit], .button:link, .button:visited {
   /*margin-left: 10px;*/
 }
 
+div#loading_anim {
+  height:128px;
+  width: 128px;
+  background: url(/images/8.gif) no-repeat;
+}
+
 /* ------------------------------------------ */
 
 /* =clearfix

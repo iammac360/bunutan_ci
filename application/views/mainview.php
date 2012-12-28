@@ -134,13 +134,12 @@
     <section id="get-started">
       <p style="line-height: 1.1;"><?php echo $section_desc; ?></p>
       <script type="text/javascript">
+       var text;
         $(document).ready(function () {
           $('input#submit').click(function () {
 
             $('input.button').toggleClass('disabledbutton');
             $('input.button').val("Maghintay Sandali...");
-            //for debugging purposes only
-            // alert("fb_id: " + pick_id + " | name: " + pick_name);
 
             $.ajax({
               url: "<?php echo base_url(); ?>process",
@@ -148,13 +147,16 @@
               data: $('#process').serialize(),
               dataType: "json",
               cache: false,
-              success: function (html) {
-                if(html.success == 1) {
+              success: function (ret) {
+                text = ret;
+                alert(ret.success);
+                if(ret.success == 1) {
+                  var src = "https://graph.facebook.com/"+ret.pick_id+"/picture?width=140&height=140";
                   $('img.anon').attr('src', src);
-                  $('p.anon').html(pick_name);
+                  $('p.anon').html(ret.pick_name);
                   $('input.button').val("Eto na po binobola na...");
                   $('input.disabledbutton').attr('disabled', 'disabled');
-                  $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si " + html.pick_name + ".")
+                  $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si " + ret.pick_name + ".")
                 }
                 else {
                   alert("Sorry, unexpected error occured. Please try again later.")
@@ -164,7 +166,7 @@
                 alert(errorThrown);
               },
               complete: function() {
-                $('input.button').fadeOut(3500);
+                $('input.button').fadeOut(5000);
                 $('input.button').hide();
                 $('p#resultmsg').show();
               }
@@ -185,6 +187,7 @@
          <div class="unknown_pic">
             <img src="<?php echo $pick_image_url; ?>" class="anon">
             <p style="text-align: center; font-size: 14px;" class="anon"><?php echo $pick_name; ?></p>
+            <div id="#loading_anim"></div>
             <?php echo form_hidden($form_hiddendata); ?>
           </div>
           <div class="clearfix"></div>
