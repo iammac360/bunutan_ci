@@ -128,11 +128,94 @@
       }(document, 'script', 'facebook-jssdk'));
     </script>
     <header class="clearfix">
-	<?php if (isset($user_info)): ?>
-    <h1>Welcome</h1>
-	<?php else: ?>	
-    <div class="fb-login-button" data-scope="user_likes,user_photos"></div>
-	<?php endif; ?>
-	</header>
+      <h1>Online Bunutan <span style="font-size: 10px">beta ver. 1.0</span></h1>
+	  </header>
+
+    <section id="get-started">
+      <p style="line-height: 1.1;"><?php echo $section_desc; ?></p>
+      <?php $attributes = array('id' => 'process'); ?>
+      <?php echo form_open(base_url().'process', $attributes); ?>
+        <div class="profile_pic">
+          <img src="<?php echo $user_image_url; ?>">
+          <p style="text-align: center; font-size: 14px;"><?php echo $user_name; ?></p>
+        </div>
+         <div class="unknown_pic">
+            <img src="<?php echo $pick_image_url; ?>" class="anon">
+            <p style="text-align: center; font-size: 14px;" class="anon"><?php echo $pick_name; ?></p>
+            <?php echo form_hidden($form_hiddendata); ?>
+          </div>
+          <div class="clearfix"></div>
+          <input type="submit" id="submit" class="button" value="Pindutin" <?php echo $hide; ?> />
+          <p id="resultmsg" style="display: <?php echo $show; ?>; line-height: 1.1;"></p>
+      <?php echo form_close(); ?>
+    </section>
+
+    <section id="samples" class="clearfix">
+      <h1>Ang mga resulta</h1>
+      <div class="list">
+        <h3>Ang Bumunot</h3>
+        <ul class="friends">
+          <?php foreach ($members_pick as $member) : ?>
+            <li>
+              <a href="https://www.facebook.com/<?php echo $member['fb_id']; ?>" target="_top">
+              <img src="<?php echo $member['fb_image_url_thumb']; ?>" alt="<?php echo he($member['fb_name']); ?>" />
+              <span class="thumbname"><?php echo he($member['fb_name']); ?></span>
+            </a>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+
+      <div class="list mid">
+        <h3 class="arrows">&nbsp;</h3>
+        <ul class="arrows">
+        <?php foreach($members_pick as $members) : ?> 
+          <li>&nbsp;</li>
+        <?php endforeach; ?>
+        <ul>
+      </div>
+
+      <div class="list">
+        <h3>Nabunot ni bumunot</h3>
+        <ul class="things">
+          <?php foreach ($members_pick as $member) : ?>
+            <li>
+              <a href="https://www.facebook.com/<?php echo $member['pick_id']; ?>" target="_top">
+              <img src="<?php echo $member['pick_image_url_thumb']; ?>" alt="<?php echo he($member['pick_name']); ?>" />
+              <span class="thumbname"><?php echo he($member['pick_name']); ?></span>
+            </a>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </section>
+
+    <section id="guides" class="clearfix">
+      <h1>Learn More About Heroku &amp; Facebook Apps</h1>
+      <ul>
+        <li>
+          <a href="https://www.heroku.com/?utm_source=facebook&utm_medium=app&utm_campaign=fb_integration" target="_top" class="icon heroku">Heroku</a>
+          <p>Learn more about <a href="https://www.heroku.com/?utm_source=facebook&utm_medium=app&utm_campaign=fb_integration" target="_top">Heroku</a>, or read developer docs in the Heroku <a href="https://devcenter.heroku.com/" target="_top">Dev Center</a>.</p>
+        </li>
+        <li>
+          <a href="https://developers.facebook.com/docs/guides/web/" target="_top" class="icon websites">Websites</a>
+          <p>
+            Drive growth and engagement on your site with
+            Facebook Login and Social Plugins.
+          </p>
+        </li>
+        <li>
+          <a href="https://developers.facebook.com/docs/guides/mobile/" target="_top" class="icon mobile-apps">Mobile Apps</a>
+          <p>
+            Integrate with our core experience by building apps
+            that operate within Facebook.
+          </p>
+        </li>
+        <li>
+          <a href="https://developers.facebook.com/docs/guides/canvas/" target="_top" class="icon apps-on-facebook">Apps on Facebook</a>
+          <p>Let users find and connect to their friends in mobile apps and games.</p>
+        </li>
+      </ul>
+    </section>
+    <p style="text-align:center; margin-top: 40px; font-size: 11px;">Developed by <a href="http://www.facebook.com/mark.sargento" target="_top" style="font-weight: bold;">Iammac</a>. Hosted by <a href="http://heroku.com" target="_top">Heroku</a></p>
+
 </body>
 </html>

@@ -39,6 +39,4 @@ class Members_model extends CI_Model {
 		$query = $this->db->get_where('members', array('fb_id' => $fb_id));
 		return $query->result();
 	}
-
-
 }

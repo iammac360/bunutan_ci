@@ -66,7 +66,7 @@ $autoload['libraries'] = array('facebook');
 */
 
 // $autoload['helper'] = array();
-$autoload['helper'] = array('utils', 'url');
+$autoload['helper'] = array('utils', 'url', 'form');
 
 
 /*
