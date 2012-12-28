@@ -181,7 +181,7 @@ class Main extends CI_Controller {
 				'hide'				=> $hide,
 				'section_desc'		=> $section_desc,
 				'user_image_url'	=> $this->graph_url.$this->user_id.'/picture?width=140&height=140',
-				'user_name'			=> he($this->user_id['name']),
+				'user_name'			=> he($this->user_info['name']),
 				'pick_image_url'	=> $pick_image_url,
 				'pick_name'			=> $pick_name,
 				'form_hiddendata'	=> $form_hiddendata	
