@@ -24,15 +24,15 @@ class Main extends CI_Controller {
 		// Redirect URI/Canvas Page URI
 		$canvas_page = $this->config->item('canvas_page');
 		// OAuth Dialog Redirect URL
-		$auth_url = "http://www.facebook.com/dialog/oauth?client_id=".
-    				$this->app_id."&redirect_uri=".urlencode($canvas_page)."&scope=email,user_birthday,user_interests,user_about_me";
+		// $auth_url = "http://www.facebook.com/dialog/oauth?client_id=".
+  //   				$this->app_id."&redirect_uri=".urlencode($canvas_page)."&scope=email,user_birthday,user_interests,user_about_me";
 
     	// Get User ID. Returns 0 if the application is not authenticated
 		$this->user_id = $this->facebook->getUser();
 		
 		if(empty($this->user_id)) 
 		{
-			echo '<script type="text/javascript">top.location.href="'.$auth_url.'";</script>';
+			echo '<script type="text/javascript">top.location.href="'.$this->facebook->getLoginURL().'";</script>';
 	        exit;
     	}
     	else 
@@ -169,7 +169,7 @@ class Main extends CI_Controller {
 				'app_info' 			=> $this->app_info,
 				'app_id'			=> $this->app_id,
 				'app_name'			=> $this->app_info['name'],
-				'app_image'			=> idx($this->app_info, 'logo_url'),
+				'app_image'			=> $this->app_info['logo_url'],
 				'user_info'			=> $this->user_info,
 				'user_id'			=> $this->user_id,
 				'group_memebers' 	=> $this->group_members,
@@ -181,7 +181,7 @@ class Main extends CI_Controller {
 				'hide'				=> $hide,
 				'section_desc'		=> $section_desc,
 				'user_image_url'	=> $this->graph_url.$this->user_id.'/picture?width=140&height=140',
-				'user_name'			=> he(idx($this->user_info, 'name')),
+				'user_name'			=> he($this->user_id['name']),
 				'pick_image_url'	=> $pick_image_url,
 				'pick_name'			=> $pick_name,
 				'form_hiddendata'	=> $form_hiddendata	

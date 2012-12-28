@@ -2,7 +2,7 @@
 
 $config['groupId']		= '149889995159117';
 
-For Production
+// For Production
 $config['appId'] = '234357903364432';
 $config['secret'] = 'a8fc00e08e19859201c5f4d09c6ad53a';
 $config['canvas_page'] = 'http://apps.facebook.com/olbunutan-beta';
