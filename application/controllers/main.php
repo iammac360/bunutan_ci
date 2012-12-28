@@ -185,10 +185,11 @@ class Main extends CI_Controller {
 	public function process()
 	{
 		$user_id = $this->input->post('fb_id');
-		$pick_info = $this->pickRandomID($user_id);
+		$pick_info = $this->pickRandomMember($user_id);
 		if($pick_info === 0)
 		{
-			echo "The user is not logged in. Cannot continue the operation.";
+			$data = array('success' => 0, 'error_message' => "The user is not logged in. Cannot continue the operation.");
+			echo json_encode($data);
 		}
 		else
 		{
@@ -197,7 +198,9 @@ class Main extends CI_Controller {
 				'pick_name'	=> $pick_info['fb_name']
 			);
 			$this->members_model->update_member($user_id, $data);
-			echo 1;
+			$data['success'] = 1;
+			
+			echo json_encode($data);
 		}
 
 		/**
@@ -205,7 +208,7 @@ class Main extends CI_Controller {
 		* Uncomment it if you want to see 
 		* all the data in a preformatted form
 		*/
-		// $pick_info = $this->pickRandomID($this->user_id);
+		// $pick_info = $this->pickRandomMember($this->user_id);
 		// echo '<pre>';
 		// print_r($pick_info);
 		// echo '</pre>';
@@ -272,7 +275,7 @@ class Main extends CI_Controller {
 		return $picks_data;
 	}
 
-	private function pickRandomID($user_id = '')
+	private function pickRandomMember($user_id = '')
 	{
 		$members 			= $this->members_model->get_all_members();
 		$picks_data 		= $this->getMemberPicks($members);

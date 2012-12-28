@@ -26,7 +26,7 @@
   <meta property="og:description" content="<?php echo $meta['og:description'] ?>" />
   <meta property="fb:app_id" content="<?php echo $meta['fb:app_id']; ?>" />
 
-  <script type="text/javascript" src="<?php echo base_url(); ?>/javascript/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="<?php echo base_url(); ?>javascript/jquery-1.7.1.min.js"></script>
 
   <script type="text/javascript">
     function logResponse(response) {
@@ -133,6 +133,49 @@
 
     <section id="get-started">
       <p style="line-height: 1.1;"><?php echo $section_desc; ?></p>
+      <script type="text/javascript">
+        $(document).ready(function () {
+          $('input#submit').click(function () {
+
+            $('input.button').toggleClass('disabledbutton');
+            $('input.button').val("Maghintay Sandali...");
+            //for debugging purposes only
+            // alert("fb_id: " + pick_id + " | name: " + pick_name);
+
+            $.ajax({
+              url: "<?php echo base_url(); ?>process.php",
+              type: "POST",
+              data: $('#process').serialize(),
+              dataType: "json",
+              cache: false,
+              success: function (html) {
+                if(html.success == 1) {
+                  $('img.anon').attr('src', src);
+                  $('p.anon').html(pick_name);
+                  $('input.button').val("Eto na po binobola na...");
+                  $('input.disabledbutton').attr('disabled', 'disabled');
+                  $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si " + html.pick_name + ".")
+                }
+                else {
+                  alert("Sorry, unexpected error occured. Please try again later.")
+                }
+              },
+              error: function(xhr, txtStatus, errorThrown) {
+                alert(errorThrown);
+              },
+              complete: function() {
+                $('input.button').fadeOut(3500);
+                $('input.button').hide();
+                $('p#resultmsg').show();
+              }
+            });
+
+            // cancel the submit button default behaviors
+            return false;
+          });
+        });
+        
+      </script>
       <?php $attributes = array('id' => 'process'); ?>
       <?php echo form_open(base_url().'process', $attributes); ?>
         <div class="profile_pic">
