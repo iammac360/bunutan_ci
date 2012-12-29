@@ -137,7 +137,7 @@
         $(document).ready(function () {
           var loading;
           $('input#submit').click(function () {
-            
+            loading = new ajaxLoader('div.loading');
             $.ajax({
               url: "<?php echo base_url(); ?>process",
               type: "POST",
@@ -145,7 +145,6 @@
               dataType: "json",
               cache: false,
               beforeSend: function () {
-                  loading = new ajaxLoader('div.loading');
                   $('input.button').toggleClass('disabledbutton');
                   $('input.button').val("Maghintay Sandali...");
                   $('input.disabledbutton').attr('disabled', 'disabled');
