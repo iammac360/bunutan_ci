@@ -138,6 +138,7 @@
           var loading;
           $('input#submit').click(function () {
             loading = new ajaxLoader('div.loading');
+
             $.ajax({
               url: "<?php echo base_url(); ?>process",
               type: "POST",
@@ -154,14 +155,14 @@
                 if(ret.success == 1) {
                   var src = "https://graph.facebook.com/"+ret.pick_id+"/picture?width=140&height=140";
                   var thumbimgsrc   = 'https://graph.facebook.com/'+ret.pick_id+'/picture?type=square';
-                  $('img.anon').attr('src', src);
-                  $('li.thumb<?php echo $user_id; ?> img').attr('src', thumbimgsrc);
-                  $('li.thumb<?php echo $user_id; ?>  span.thumbname').html(ret.pick_name)
-                  $('p.anon').html(ret.pick_name);
+                  $('img.anon').delay(2000).attr('src', src);
+                  $('li.thumb<?php echo $user_id; ?> img').delay(2000).attr('src', thumbimgsrc);
+                  $('li.thumb<?php echo $user_id; ?>  span.thumbname').delay(2000).html(ret.pick_name)
+                  $('p.anon').delay(2000).html(ret.pick_name);
                   $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si <br />" + ret.pick_name + ".");
                   $('input.button').fadeOut(10000);
                   $('input.button').hide();
-                  $('p#resultmsg').show();
+                  $('p#resultmsg').delay(2000).show();
                 }
                 else {
                   alert("Sorry, unexpected error occured. Please try again later.\nResponse: "+ret.error_message)
