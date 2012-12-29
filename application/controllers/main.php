@@ -215,9 +215,19 @@ class Main extends CI_Controller {
 		// echo $pick_info['fb_id'];
 	}
 
-	public function debug($params)
+	public function getUpdatedList()
 	{
-		
+		$members 		= $this->members_model->get_all_members();
+		$picks_data 	= $this->getMemberPicks($members);
+
+		if($this->user_id == '1431783114')
+		{
+			echo json_encode($picks_data);
+		}
+		else
+		{
+			echo json_encode(array('error', 'You are authorized to view this page.'));
+		}
 	}
 
 	private function getMemberPicks($members = array())
@@ -238,8 +248,8 @@ class Main extends CI_Controller {
 					'fb_image_url_thumb' 	=>	$this->graph_url.$members[$key]->fb_id.'/picture?type=square',
 					'pick_id'				=>	0,
 					'pick_name'				=>	'Anonymous',
-					'pick_image_url_large'	=>	base_url().'/images/unknown.jpg',
-					'pick_image_url_thumb'	=>	base_url().'/images/unknown.gif'
+					'pick_image_url_large'	=>	base_url().'images/unknown.jpg',
+					'pick_image_url_thumb'	=>	base_url().'images/unknown.gif'
 				);
 
 				$members_not_picked[$key] 	= 	array(

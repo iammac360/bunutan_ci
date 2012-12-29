@@ -26,8 +26,8 @@
   <meta property="og:description" content="<?php echo $meta['og:description'] ?>" />
   <meta property="fb:app_id" content="<?php echo $meta['fb:app_id']; ?>" />
 
-  <script type="text/javascript" src="<?php echo base_url(); ?>javascript/jquery-1.7.1.min.js"></script>
-
+  <script id="jquery" type="text/javascript" src="<?php echo base_url(); ?>javascript/jquery-1.7.1.min.js"></script>
+  <script id="loader" type="text/javascript" src="<?php echo base_url(); ?>javascript/ajaxloader.js"></script>
   <script type="text/javascript">
     function logResponse(response) {
       if (console && console.log) {
@@ -134,41 +134,50 @@
     <section id="get-started">
       <p style="line-height: 1.1;"><?php echo $section_desc; ?></p>
       <script type="text/javascript">
-       var text;
         $(document).ready(function () {
+          var loading;
           $('input#submit').click(function () {
-
-            $('input.button').toggleClass('disabledbutton');
-            $('input.button').val("Maghintay Sandali...");
-
+            
             $.ajax({
               url: "<?php echo base_url(); ?>process",
               type: "POST",
               data: $('#process').serialize(),
               dataType: "json",
               cache: false,
+              beforeSend: function () {
+                  loading = new ajaxLoader('div.loading');
+                  $('input.button').toggleClass('disabledbutton');
+                  $('input.button').val("Maghintay Sandali...");
+                  $('input.disabledbutton').attr('disabled', 'disabled');
+              },
               success: function (ret) {
-                text = ret;
-                alert(ret.success);
+                // alert(ret.success);
                 if(ret.success == 1) {
                   var src = "https://graph.facebook.com/"+ret.pick_id+"/picture?width=140&height=140";
+                  var thumbimgsrc   = 'https://graph.facebook.com/'+ret.pick_id+'/picture?type=square';
                   $('img.anon').attr('src', src);
+                  $('li.thumb<?php echo $user_id; ?> img').attr('src', thumbimgsrc);
+                  $('li.thumb<?php echo $user_id; ?>  span.thumbname').html(ret.pick_name)
                   $('p.anon').html(ret.pick_name);
-                  $('input.button').val("Eto na po binobola na...");
-                  $('input.disabledbutton').attr('disabled', 'disabled');
-                  $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si " + ret.pick_name + ".")
+                  $('p#resultmsg').html("Ang Nabunot ni <?php echo he($user_name); ?> ay walang iba kundi si <br />" + ret.pick_name + ".");
+                  $('input.button').fadeOut(10000);
+                  $('input.button').hide();
+                  $('p#resultmsg').show();
                 }
                 else {
-                  alert("Sorry, unexpected error occured. Please try again later.")
+                  alert("Sorry, unexpected error occured. Please try again later.\nResponse: "+ret.error_message)
+                  $('input.button').removeClass('disabledbutton');
+                  $('input.button').val("Pindutin");
+                  $('input.button').removeAttr('disabled');
                 }
               },
-              error: function(xhr, txtStatus, errorThrown) {
-                alert(errorThrown);
+              error: function(ret, txtStatus, errorThrown) {
+                alert(ret.error_message);
+                $('input.button').val("Pindutin");
+                $('input.disabledbutton').removeAttr('disabled');
               },
-              complete: function() {
-                $('input.button').fadeOut(5000);
-                $('input.button').hide();
-                $('p#resultmsg').show();
+              complete: function(ret, txtStatus) {
+                loading.remove();
               }
             });
 
@@ -181,13 +190,12 @@
       <?php $attributes = array('id' => 'process'); ?>
       <?php echo form_open(base_url().'process', $attributes); ?>
         <div class="profile_pic">
-          <img src="<?php echo $user_image_url; ?>">
+          <div class="user_pic"><img src="<?php echo $user_image_url; ?>"></div>
           <p style="text-align: center; font-size: 14px;"><?php echo $user_name; ?></p>
         </div>
          <div class="unknown_pic">
-            <img src="<?php echo $pick_image_url; ?>" class="anon">
+            <div class="loading"><img src="<?php echo $pick_image_url; ?>" class="anon"></div>
             <p style="text-align: center; font-size: 14px;" class="anon"><?php echo $pick_name; ?></p>
-            <div id="#loading_anim"></div>
             <?php echo form_hidden($form_hiddendata); ?>
           </div>
           <div class="clearfix"></div>
@@ -224,7 +232,7 @@
         <h3>Nabunot ni bumunot</h3>
         <ul class="things">
           <?php foreach ($members_pick as $member) : ?>
-            <li>
+            <li class="thumb<?php echo $member['fb_id']; ?>">
               <a href="https://www.facebook.com/<?php echo $member['pick_id']; ?>" target="_top">
               <img src="<?php echo $member['pick_image_url_thumb']; ?>" alt="<?php echo he($member['pick_name']); ?>" />
               <span class="thumbname"><?php echo he($member['pick_name']); ?></span>
@@ -262,6 +270,5 @@
       </ul>
     </section>
     <p style="text-align:center; margin-top: 40px; font-size: 11px;">Developed by <a href="http://www.facebook.com/mark.sargento" target="_top" style="font-weight: bold;">Iammac</a>. Hosted by <a href="http://heroku.com" target="_top">Heroku</a></p>
-
 </body>
 </html>

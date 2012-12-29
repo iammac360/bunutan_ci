@@ -8,13 +8,6 @@ class Members_model extends CI_Model {
 
 	public function set_all_members($data)
 	{
-		// $data = array(
-		// 		'fb_id' 	=> $this->input->post('fb_id'),
-		// 		'fb_name'	=> $this->input->post('fb_name'),
-		// 		'pick_id'	=> $this->input->post('pick_id'),
-		// 		'pick_name'	=> $this->input->post('pick_name')
-		// 	);
-
 		$this->db->insert_batch('members', $data);
 	}
 
