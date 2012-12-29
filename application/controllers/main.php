@@ -78,10 +78,11 @@ class Main extends CI_Controller {
 			$this->members_model->set_all_members($members_data);
 		}
 
-		$picks_data			= $this->getMemberPicks($members);
-		$members_pick 		= $picks_data['members_pick'];
-		$members_picked 	= $picks_data['members_picked'];
-		$members_not_picked = $picks_data['members_not_picked'];
+		$picks_data				= $this->getMemberPicks($members);
+		$members_pick 			= $picks_data['members_pick'];
+		$members_picked 		= $picks_data['members_picked'];
+		$members_not_picked		= $picks_data['members_not_picked'];
+		$members_not_yet_picked	= $picks_data['members_not_yet_picked'];
 
 		foreach($members_not_picked as $key => $value)
 		{
@@ -121,25 +122,26 @@ class Main extends CI_Controller {
 
 		//Initialize the data to be used on views
 		$data = array(
-				'app_info' 			=> $this->app_info,
-				'app_id'			=> $this->app_id,
-				'app_name'			=> $this->app_info['name'],
-				'app_image'			=> $this->app_info['logo_url'],
-				'user_info'			=> $this->user_info,
-				'user_id'			=> $this->user_id,
-				'group_members' 	=> $this->group_members,
-				'graph_url'			=> $this->graph_url,
-				'members'			=> $members,
-				'members_pick'		=> $members_pick,
-				'members_not_picked'=> $members_not_picked,
-				'show'				=> $show,
-				'hide'				=> $hide,
-				'section_desc'		=> $section_desc,
-				'user_image_url'	=> $this->graph_url.$this->user_id.'/picture?width=140&height=140',
-				'user_name'			=> he($this->user_info['name']),
-				'pick_image_url'	=> $pick_image_url,
-				'pick_name'			=> $pick_name,
-				'form_hiddendata'	=> $form_hiddendata	
+				'app_info' 				=> $this->app_info,
+				'app_id'				=> $this->app_id,
+				'app_name'				=> $this->app_info['name'],
+				'app_image'				=> $this->app_info['logo_url'],
+				'user_info'				=> $this->user_info,
+				'user_id'				=> $this->user_id,
+				'group_members' 		=> $this->group_members,
+				'graph_url'				=> $this->graph_url,
+				'members'				=> $members,
+				'members_pick'			=> $members_pick,
+				'members_not_picked'	=> $members_not_picked,
+				'members_not_yet_picked'=> $members_not_picked,
+				'show'					=> $show,
+				'hide'					=> $hide,
+				'section_desc'			=> $section_desc,
+				'user_image_url'		=> $this->graph_url.$this->user_id.'/picture?width=140&height=140',
+				'user_name'				=> he($this->user_info['name']),
+				'pick_image_url'		=> $pick_image_url,
+				'pick_name'				=> $pick_name,
+				'form_hiddendata'		=> $form_hiddendata	
 			);
 		// Initialize Open Graph metadata
 		$data['meta'] = array(
@@ -215,14 +217,27 @@ class Main extends CI_Controller {
 		// echo $pick_info['fb_id'];
 	}
 
-	public function getUpdatedList()
+	public function getUpdatedList($ty = 'json')
 	{
 		$members 		= $this->members_model->get_all_members();
 		$picks_data 	= $this->getMemberPicks($members);
 
 		if($this->user_id == '1431783114')
 		{
-			echo json_encode($picks_data);
+			if($ty == 'json' || $ty == '')
+			{
+				echo json_encode($picks_data);
+			}
+			elseif($ty == 'pre-array')
+			{
+				echo '<pre>';
+				print_r($picks_data);
+				echo '</pre>';
+			}
+			else
+			{
+				show_404();
+			}
 		}
 		else
 		{
@@ -232,10 +247,11 @@ class Main extends CI_Controller {
 
 	private function getMemberPicks($members = array())
 	{
-		$members_pick 		= array();
-		$members_picked 	= array();
-		$members_not_picked = array();
-		$picks_data			= array();
+		$members_pick 			= array();
+		$members_picked 		= array();
+		$members_not_picked 	= array();
+		$members_not_yet_picked = array();
+		$picks_data				= array();
 
 		foreach($members as $key => $value)
 		{
@@ -280,24 +296,35 @@ class Main extends CI_Controller {
 				);
 			}
 
-			foreach($members_not_picked as $key => $val)
+			foreach($members as $key => $val)
+			{
+				$members_not_yet_picked[$key] = array(
+					'fb_id' 				=> 	$members[$key]->fb_id, 
+					'fb_name'				=>	$members[$key]->fb_name,
+					'fb_image_url_large'	=>	$this->graph_url.$members[$key]->fb_id.'/picture?width=140&height=140'
+				);
+			}
+
+			foreach($members as $key => $val)
 			{
 				foreach($members_picked as $k => $v)
 				{
-					if($val['fb_id'] == $v['pick_id'])
+					if($val->fb_id == $v['pick_id'])
 					{
-						unset($members_not_picked[$key]);
+						unset($members_not_yet_picked[$key]);
 					}
 				}
 			}
+			sort($members_not_yet_picked);
 			sort($members_not_picked);
 			sort($members_picked);
 		}
 
 		$picks_data = array(
-				'members_pick'		=> 	$members_pick,
-				'members_picked'	=> 	$members_picked,
-				'members_not_picked'=>	$members_not_picked
+				'members_pick'				=> 	$members_pick,
+				'members_picked'			=> 	$members_picked,
+				'members_not_picked'		=>	$members_not_picked,
+				'members_not_yet_picked' 	=> $members_not_yet_picked
 			);
 
 		return $picks_data;
@@ -305,10 +332,10 @@ class Main extends CI_Controller {
 
 	private function pickRandomMember($user_id = '')
 	{
-		$members 			= $this->members_model->get_all_members();
-		$picks_data 		= $this->getMemberPicks($members);
-		$members_not_picked = array();
-		$members_picked 	= $picks_data['members_picked'];
+		$members 				= $this->members_model->get_all_members();
+		$picks_data 			= $this->getMemberPicks($members);
+		$members_not_yet_picked = array();
+		$members_picked 		= $picks_data['members_picked'];
 
 		if(empty($user_id) || $user_id != $this->user_id)
 		{
@@ -317,7 +344,7 @@ class Main extends CI_Controller {
 		else
 		{
 			// Removes the user from the array to elimination picking himself
-			foreach($picks_data['members_not_picked'] as $key => $value)
+			foreach($picks_data['members_not_yet_picked'] as $key => $value)
 			{
 				if($value['fb_id'] != $user_id && $value)
 				{
@@ -325,14 +352,14 @@ class Main extends CI_Controller {
 				}
 			}
 
-			$pick = array_rand($members_not_picked, 1);
+			$pick = array_rand($members_not_yet_picked, 1);
 			// echo '<pre>';
 			// print_r($members_not_picked);
 			// echo '<br /> This is my pick:';
 			// print_r($members_not_picked[$pick]);
 			// echo '</pre>';
 
-			return $members_not_picked[$pick];
+			return $members_not_yet_picked[$pick];
 		}
 	}
 }

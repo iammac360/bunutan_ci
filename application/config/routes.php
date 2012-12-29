@@ -40,6 +40,7 @@
 
 // $route['default_controller'] = "welcome";
 $route['getupdatedlist']		= 'main/getupdatedlist';
+$route['getupdatedlist/(:any)']	= 'main/getupdatedlist/$1';
 $route['process']				= 'main/process';
 $route['default_controller'] 	= 'main';
 $route['404_override'] 			= '';
