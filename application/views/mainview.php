@@ -204,7 +204,7 @@
       <?php echo form_close(); ?>
     </section>
 
-    <?php if($user_id == '1431783114'):?>
+    <?php //if($user_id == '1431783114'):?>
     <section id="samples" class="clearfix">
       <h1>Ang mga resulta</h1>
       <div class="list">
@@ -242,8 +242,7 @@
         </ul>
       </div>
     </section>
-    <?php endif; ?>
-
+    <?php //endif; ?>
 
     <section id="guides" class="clearfix">
       <h1>Learn More About Heroku &amp; Facebook Apps</h1>
