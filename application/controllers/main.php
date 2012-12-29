@@ -190,7 +190,7 @@ class Main extends CI_Controller {
 		$pick_info = $this->pickRandomMember($user_id);
 		if($pick_info === 0)
 		{
-			$data = array('success' => 0, 'error_message' => "The user is not logged in. Cannot continue the operation.");
+			$data = array('success' => 0, 'error_message' => "The user is not logged in or has not been authenticated. Cannot continue the operation.");
 			echo json_encode($data);
 		}
 		else
@@ -348,15 +348,15 @@ class Main extends CI_Controller {
 			{
 				if($value['fb_id'] != $user_id && $value)
 				{
-					$members_not_picked[$key] = $value;
+					$members_not_yet_picked[$key] = $value;
 				}
 			}
 
 			$pick = array_rand($members_not_yet_picked, 1);
 			// echo '<pre>';
-			// print_r($members_not_picked);
+			// print_r($members_not_yet_picked);
 			// echo '<br /> This is my pick:';
-			// print_r($members_not_picked[$pick]);
+			// print_r($members_not_yet_picked[$pick]);
 			// echo '</pre>';
 
 			return $members_not_yet_picked[$pick];
