@@ -1,6 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['groupId']		= '149889995159117';
+//$config['groupId']		= '149889995159117';
+$config['groupId']		= '287310791394228';
 
 // For Production
 $config['appId'] = '234357903364432';
