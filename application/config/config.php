@@ -16,10 +16,10 @@
 | $config['base_url']  = sprintf('%s://%s', $_SERVER['HTTP_X_FORWARDED_PROTO'], $_SERVER['HTTP_HOST']);
 */
    // for production
-   $config['base_url']  = 'http://floating-mesa-7484.herokuapp.com/';
+   $config['base_url']  = 'http://bunutan.herokuapp.com/';
 
    // for local development
-   // $config['base_url']  = 'http://olbunutan.mac/'; 
+   // $config['base_url']  = 'http://olbunutan.mac/';
 
 /*
 |--------------------------------------------------------------------------
