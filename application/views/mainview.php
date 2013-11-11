@@ -7,7 +7,7 @@
 	<title><?php echo he($app_name); ?></title>
 	<link rel="stylesheet" href="<?php echo base_url(); ?>stylesheets/screen.css" media="Screen" type="text/css" />
   <link rel="stylesheet" href="<?php echo base_url(); ?>stylesheets/mobile.css" media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 480px)" type="text/css" />
-  
+
   <!--[if IEMobile]>
   <link rel="stylesheet" href="mobile.css" media="screen" type="text/css"  />
   <![endif]-->
@@ -185,7 +185,7 @@
             return false;
           });
         });
-        
+
       </script>
       <?php $attributes = array('id' => 'process'); ?>
       <?php echo form_open(base_url().'process', $attributes); ?>
@@ -223,7 +223,7 @@
       <div class="list mid">
         <h3 class="arrows">&nbsp;</h3>
         <ul class="arrows">
-        <?php foreach($members_pick as $members) : ?> 
+        <?php foreach($members_pick as $members) : ?>
           <li>&nbsp;</li>
         <?php endforeach; ?>
         <ul>
@@ -243,34 +243,6 @@
       </div>
     </section>
     <?php endif; ?>
-
-    <section id="guides" class="clearfix">
-      <h1>Learn More About Heroku &amp; Facebook Apps</h1>
-      <ul>
-        <li>
-          <a href="https://www.heroku.com/?utm_source=facebook&utm_medium=app&utm_campaign=fb_integration" target="_top" class="icon heroku">Heroku</a>
-          <p>Learn more about <a href="https://www.heroku.com/?utm_source=facebook&utm_medium=app&utm_campaign=fb_integration" target="_top">Heroku</a>, or read developer docs in the Heroku <a href="https://devcenter.heroku.com/" target="_top">Dev Center</a>.</p>
-        </li>
-        <li>
-          <a href="https://developers.facebook.com/docs/guides/web/" target="_top" class="icon websites">Websites</a>
-          <p>
-            Drive growth and engagement on your site with
-            Facebook Login and Social Plugins.
-          </p>
-        </li>
-        <li>
-          <a href="https://developers.facebook.com/docs/guides/mobile/" target="_top" class="icon mobile-apps">Mobile Apps</a>
-          <p>
-            Integrate with our core experience by building apps
-            that operate within Facebook.
-          </p>
-        </li>
-        <li>
-          <a href="https://developers.facebook.com/docs/guides/canvas/" target="_top" class="icon apps-on-facebook">Apps on Facebook</a>
-          <p>Let users find and connect to their friends in mobile apps and games.</p>
-        </li>
-      </ul>
-    </section>
     <p style="text-align:center; margin-top: 40px; font-size: 11px;">Developed by <a href="http://www.facebook.com/mark.sargento" target="_top" style="font-weight: bold;">Iammac</a>. Hosted by <a href="http://heroku.com" target="_top">Heroku</a></p>
 </body>
 </html>
