@@ -204,7 +204,7 @@
       <?php echo form_close(); ?>
     </section>
 
-    <?php if($user_id == '1431783114'):?>
+    <?php if($user_id == '1431783114' || $user_id == '1217702350'):?>
     <section id="samples" class="clearfix">
       <h1>Ang mga resulta</h1>
       <div class="list">
